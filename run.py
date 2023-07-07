@@ -7,7 +7,7 @@ from nltk.tokenize import word_tokenize
 
 from flask import Flask
 from flask import render_template, request, jsonify
-from plotly.graph_objs import Bar
+from plotly.graph_objs import Bar, Layout
 from sklearn.externals import joblib
 from sqlalchemy import create_engine
 
@@ -37,32 +37,51 @@ model = joblib.load("../models/classifier.pk1")
 @app.route('/')
 @app.route('/index')
 def index():
-    
     # extract data needed for visuals
-    # TODO: Below is an example - modify to extract data for your own visuals
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
     
+    # Top 10 categories
+    category_counts = df.iloc[:, 4:].sum().sort_values(ascending=False).head(10)
+    category_names = list(category_counts.index)
+
     # create visuals
-    # TODO: Below is an example - modify to create your own visuals
     graphs = [
+        # First visualization: Distribution of Message Genres
         {
             'data': [
                 Bar(
                     x=genre_names,
-                    y=genre_counts
+                    y=genre_counts,
+                    marker=dict(color='rgba(58, 71, 80, 0.6)'),
+                    text=['{} messages in {}'.format(y, x) for x, y in zip(genre_names, genre_counts)],
+                    hoverinfo='text'
                 )
             ],
-
-            'layout': {
-                'title': 'Distribution of Message Genres',
-                'yaxis': {
-                    'title': "Count"
-                },
-                'xaxis': {
-                    'title': "Genre"
-                }
-            }
+            'layout': Layout(
+                title='Distribution of Message Genres',
+                yaxis=dict(title="Count"),
+                xaxis=dict(title="Genre")
+            )
+        },
+        # Second visualization: Top 10 Categories
+        {
+            'data': [
+                Bar(
+                    x=category_counts,
+                    y=category_names,
+                    orientation='h',  # horizontal bar chart
+                    marker=dict(color='rgba(80, 58, 71, 0.6)'),
+                    text=['{} messages in {}'.format(x, y) for x, y in zip(category_counts, category_names)],
+                    hoverinfo='text'
+                )
+            ],
+            'layout': Layout(
+                title='Top 10 Message Categories',
+                xaxis=dict(title="Count"),
+                yaxis=dict(title="Category"),
+                margin=dict(l=150)  # Adjust left margin for better visibility
+            )
         }
     ]
     
