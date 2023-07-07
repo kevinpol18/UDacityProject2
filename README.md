@@ -21,14 +21,15 @@ Run `process_data.py`
 Store the data folder in the current working directory and place process_data.py inside the data folder.
 In the current working directory, execute the following command: `python data/process_data.py data/disaster_messages.csv data/disaster_categories.csv data/DisasterResponse.db`
 Run `train_classifier.py`
+Create a folder named 'models' in the current working directory and store train_classifier.py inside it.
+In the current working directory, execute the following command: `python models/train_classifier.py data/DisasterResponse.db models/classifier.pkl`
+Launch the web application
+Store the app folder in the current working directory.
+Run the following command inside the app directory: python run.py
 
 ## Imbalance Warning
 Please note that the datasets in this repository are highly imbalanced, with several message categories containing very few positive examples. In some instances, the proportion of positive examples is less than 5%, or even less than 1%. Consequently, although the classifier's accuracy may be high (as it generally predicts that messages do not belong to these categories), the classifier's recall (i.e., the proportion of positive examples correctly labeled) tends to be quite low. Therefore, exercise caution when relying on the results of this app for decision-making purposes.
 
 ## License, Authors, and Acknowledgments
 This web application was developed as part of the Udacity Data Scientist Nanodegree program. Udacity provided code templates and data. The original data was sourced by Udacity from Figure Eight.
-Create a folder named 'models' in the current working directory and store train_classifier.py inside it.
-In the current working directory, execute the following command: `python models/train_classifier.py data/DisasterResponse.db models/classifier.pkl`
-Launch the web application
-Store the app folder in the current working directory.
-Run the following command inside the app directory: python run.py
+
